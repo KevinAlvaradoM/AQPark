@@ -1,0 +1,10 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map-container {
+    height: calc(100% - 112px); /* Resta la altura de la navbar (56px es el alto típico de navbar en Bootstrap) */
+    width: 100%;
+}

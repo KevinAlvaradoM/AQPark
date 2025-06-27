@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="/img/favicon/site.webmanifest">
+
+    <title>AQPark</title>
+    <!-- Cargar Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Cargar Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+    /* Contenedor de toasts - posicionado encima de todo */
+    .toast-container {
+        position: fixed;
+        top: 70px; /* Ajusta según la altura de tu navbar */
+        right: 20px;
+        z-index: 9999;
+        max-width: 350px;
+    }
+    
+    /* Estilos adicionales para los toasts */
+    .toast {
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    /* Colores personalizados para los toasts */
+    .toast-primary {
+        background-color: #cff4fc;
+        border-left: 4px solid #0dcaf0;
+    }
+    
+    .toast-success {
+        background-color: #d1e7dd;
+        border-left: 4px solid #198754;
+    }
+    
+    .toast-warning {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+    }
+    
+    .toast-danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .toast-info {
+        background-color: #cff4fc;
+        border-left: 4px solid #0dcaf0;
+    }
+    
+    .toast-dark {
+        background-color: #d3d3d4;
+        border-left: 4px solid #495057;
+    }
+</style>
+</head>
+<body>
+    <!-- Navbar -->
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Botón de búsqueda a la derecha -->
+        <button class="btn order-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFiltros" aria-controls="offcanvasFiltros">
+            <i class="bi bi-search"></i>
+        </button>
+        <!-- Nombre de la web centrado 
+        <span class="navbar-brand mb-0 h1 mx-auto order-1">AQPark</span> -->
+        <a class="navbar-brand mb-0 h1 mx-auto order-1" href="#">
+            <img src="/img/logo_v1.1.png" alt="AQPark" width="150
+            " height="">
+        </a>
+    </div>
+</nav>
+<div class="toast-container" id="toast-container">
+    <!-- Los toasts se agregarán aquí dinámicamente -->
+</div>
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasFiltros" aria-labelledby="offcanvasFiltrosLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasFiltrosLabel">Filtros</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            
+            <!-- Filtros -->
+            <div class="mb-3">
+                <label for="categoria-select" class="form-label">Categoría</label>
+                <select id="categoria-select" class="form-select">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="departamento-select" class="form-label">Departamento</label>
+                <select id="departamento-select" class="form-select">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="provincia-select" class="form-label">Provincia</label>
+                <select id="provincia-select" class="form-select">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="distrito-select" class="form-label">Distrito</label>
+                <select id="distrito-select" class="form-select">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <hr>
+            <p>Hola, esta es una web donde se a recopilado de manera manual las PLAYAS de estacionamiento en nuestra ciudad, quizá puedas encontrar algunos errores o algunos datos faltantes, siéntete libre de compartir con nosotros si quieres recomendarnos datos para actualizar esta web, asi lo hacemos mejor para todos.</p>
+            
+            <a class="btn btn-info container-fluid" role="button" href="#" >Reportar un error</a>
+            <hr>
+
+        </div>
+    </div>
+
+    <!-- Contenedor del mapa -->
+    <div id="map-container"></div>
+
+    <nav class="navbar sticky-bottom bg-body-tertiary ">
+        <div class="container-fluid justify-content-center">
+            <span class="navbar-text text-center">
+                Hecho con 💜 por <a href="https://www.instagram.com/KevinAlvaradoMPE" target="_blank">Kevin Alvarado</a> | Desde la ciudad de <b>Arequipa</b> 🌋
+            </span>
+
+        </div>
+    </nav>
+
+    <!-- Cargar Bootstrap Icons (para el ícono de búsqueda) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Cargar Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Cargar Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Tu script personalizado -->
+    <script src="script.js"></script>
+    <script>
+    // Sistema de toasts
+    let toastCounter = 0;
+    
+    // Función principal para mostrar toast
+    function showToast(message, type = 'info', duration = 5000, title = null) {
+        const toastId = 'toast-' + (++toastCounter);
+        const toastContainer = document.getElementById('toast-container');
+        
+        // Crear el HTML del toast
+        const toastHTML = `
+            <div class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true" id="${toastId}">
+                <div class="toast-header">
+                    <strong class="me-auto">${title || getToastTitle(type)}</strong>
+                    <small class="text-muted">ahora</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        // Agregar el toast al contenedor
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        
+        // Inicializar el toast con Bootstrap
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            delay: duration
+        });
+        
+        // Mostrar el toast
+        toast.show();
+        
+        // Remover el toast del DOM después de que se oculte
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+        
+        return toastId;
+    }
+    
+    // Función auxiliar para obtener títulos por defecto
+    function getToastTitle(type) {
+        const titles = {
+            'success': '✅ Éxito',
+            'warning': '⚠️ Advertencia',
+            'danger': '❌ Error',
+            'info': 'ℹ️ Información',
+            'primary': '📢 Aviso',
+            'dark': '🔔 Notificación'
+        };
+        return titles[type] || 'Notificación';
+    }
+    
+    // Funciones específicas para cada tipo de toast
+    function showSuccessToast(message, duration = 5000) {
+        return showToast(message, 'success', duration);
+    }
+    
+    function showWarningToast(message, duration = 5000) {
+        return showToast(message, 'warning', duration);
+    }
+    
+    function showErrorToast(message, duration = 5000) {
+        return showToast(message, 'danger', duration);
+    }
+    
+    function showInfoToast(message, duration = 5000) {
+        return showToast(message, 'info', duration);
+    }
+    
+    // Función para mostrar toast con botones adicionales
+    function showToastWithActions(message, type = 'info', actions = [], duration = 0) {
+        const toastId = 'toast-' + (++toastCounter);
+        const toastContainer = document.getElementById('toast-container');
+        
+        // Crear botones de acción
+        let actionsHTML = '';
+        if (actions.length > 0) {
+            actionsHTML = '<div class="mt-2 pt-2 border-top">';
+            actions.forEach(action => {
+                actionsHTML += `<button type="button" class="btn btn-${action.variant || 'primary'} btn-sm me-2" onclick="${action.onClick}">${action.text}</button>`;
+            });
+            actionsHTML += '</div>';
+        }
+        
+        const toastHTML = `
+            <div class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true" id="${toastId}">
+                <div class="toast-header">
+                    <strong class="me-auto">${getToastTitle(type)}</strong>
+                    <small class="text-muted">ahora</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                    ${actionsHTML}
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            delay: duration,
+            autohide: duration > 0
+        });
+        
+        toast.show();
+        
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+        
+        return toastId;
+    }
+    
+    // Función para cerrar un toast específico
+    function closeToast(toastId) {
+        const toastElement = document.getElementById(toastId);
+        if (toastElement) {
+            const toast = bootstrap.Toast.getInstance(toastElement);
+            if (toast) {
+                toast.hide();
+            }
+        }
+    }
+    
+    // Función para cerrar todos los toasts
+    function closeAllToasts() {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(toastElement => {
+            const toast = bootstrap.Toast.getInstance(toastElement);
+            if (toast) {
+                toast.hide();
+            }
+        });
+    }
+    
+    // EJEMPLOS DE USO (puedes eliminar estas líneas):
+    // Mostrar toasts de ejemplo al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        // Esperar un poco para que cargue todo
+        setTimeout(() => {
+            showInfoToast('¡Bienvenido a AQPark! 🎉');
+            
+            setTimeout(() => {
+                showSuccessToast('Datos cargados correctamente ✨');
+            }, 1000);
+            
+            setTimeout(() => {
+                showToastWithActions(
+                    '¿Te gustaría recibir notificaciones sobre nuevos estacionamientos?',
+                    'warning',
+                    [
+                        { text: 'Sí', variant: 'success', onClick: 'handleNotificationYes()' },
+                        { text: 'No', variant: 'secondary', onClick: 'handleNotificationNo()' }
+                    ],
+                    0 // No se auto-oculta
+                );
+            }, 2000);
+        }, 1000);
+    });
+    
+    // Funciones de ejemplo para los botones de acción
+    function handleNotificationYes() {
+        showSuccessToast('¡Perfecto! Te notificaremos sobre nuevos estacionamientos');
+        closeAllToasts();
+    }
+    
+    function handleNotificationNo() {
+        showInfoToast('Entendido, no recibirás notificaciones');
+        closeAllToasts();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+<link rel="manifest" href="/img/favicon/site.webmanifest">
+
+    <title>Mapa con Leaflet y OpenStreetMap</title>
+    <!-- Cargar Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Cargar Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- Navbar -->
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Botón de búsqueda a la derecha -->
+        <button class="btn order-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFiltros" aria-controls="offcanvasFiltros">
+            <i class="bi bi-search"></i>
+        </button>
+        <!-- Nombre de la web centrado 
+        <span class="navbar-brand mb-0 h1 mx-auto order-1">AQPark</span> -->
+        <a class="navbar-brand mb-0 h1 mx-auto order-1" href="#">
+            <img src="/img/logo_v1.1.png" alt="AQPark" width="150
+            " height="">
+        </a>
+    </div>
+</nav>
+
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasFiltros" aria-labelledby="offcanvasFiltrosLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasFiltrosLabel">Filtros</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            
+            <!-- Filtros -->
+            <div class="mb-3">
+                <label for="categoria-select" class="form-label">Categoría</label>
+                <select id="categoria-select" class="form-select">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="departamento-select" class="form-label">Departamento</label>
+                <select id="departamento-select" class="form-select">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="provincia-select" class="form-label">Provincia</label>
+                <select id="provincia-select" class="form-select">
+                    <option value="">Todas</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="distrito-select" class="form-label">Distrito</label>
+                <select id="distrito-select" class="form-select">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+
+            <hr>
+            <p>Hola, esta es una web donde se a recopilado de manera manual las PLAYAS de estacionamiento en nuestra ciudad, quizá puedas encontrar algunos errores o algunos datos faltantes, siéntete libre de compartir con nosotros si quieres recomendarnos datos para actualizar esta web, asi lo hacemos mejor para todos.</p>
+            
+            <a class="btn btn-info container-fluid" role="button" href="#" >Reportar un error</a>
+            <hr>
+
+        </div>
+    </div>
+
+    <!-- Contenedor del mapa -->
+    <div id="map-container"></div>
+
+    <nav class="navbar sticky-bottom bg-body-tertiary ">
+        <div class="container-fluid justify-content-center">
+            <span class="navbar-text text-center">
+                Hecho con 💜 por <a href="https://www.instagram.com/KevinAlvaradoMPE" target="_blank">Kevin Alvarado</a> | Desde la ciudad de <b>Arequipa</b> 🌋
+            </span>
+
+        </div>
+    </nav>
+
+    <!-- Cargar Bootstrap Icons (para el ícono de búsqueda) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Cargar Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Cargar Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Tu script personalizado -->
+    <script src="script.js"></script>
+</body>
+</html>
