@@ -4,6 +4,58 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+/////////////////////////////////////////////////
+////ubicaicon usurio
+
+// Marcador personalizado para la ubicación del usuario
+var userIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    shadowSize: [41, 41]
+});
+
+// Variable para almacenar el marcador del usuario
+var userMarker = null;
+
+// Mostrar y actualizar la ubicación del usuario en tiempo real
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(
+        function(position) {
+            var userLat = position.coords.latitude;
+            var userLng = position.coords.longitude;
+
+            // Si ya existe un marcador, actualizar su posición
+            if (userMarker) {
+                userMarker.setLatLng([userLat, userLng]);
+            } else {
+                // Crear un nuevo marcador para la ubicación del usuario
+                userMarker = L.marker([userLat, userLng], { icon: userIcon }).addTo(map);
+                userMarker.bindPopup('<b>¡Estás aquí!</b>').openPopup();
+            }
+
+            // Centrar el mapa en la ubicación del usuario (solo la primera vez)
+            if (!map.getBounds().contains([userLat, userLng])) {
+                map.setView([userLat, userLng], 13);
+            }
+        },
+        function(error) {
+            console.error('Error al obtener la ubicación:', error);
+            alert('No se pudo obtener tu ubicación. Asegúrate de permitir el acceso a la geolocalización.');
+        },
+        {
+            enableHighAccuracy: true, // Mayor precisión
+            timeout: 10000, // Tiempo máximo de espera (10 segundos)
+            maximumAge: 0 // No usar caché de ubicación
+        }
+    );
+} else {
+    alert('Tu navegador no soporta geolocalización.');
+}
+/////////////////////////////////////////////////
+
 // Capa para los marcadores
 var markersLayer = L.layerGroup().addTo(map);
 
